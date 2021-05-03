@@ -10,10 +10,10 @@
         android:id="@+id/input_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:ems="10"
-        android:inputType="textPersonName"
+        android:inputType="number"
         app:layout_constraintStart_toEndOf="@+id/textView"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -29,7 +29,8 @@
             android:id="@+id/outcome"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Расход" />
+            android:text="Расход"
+            android:checked="true"/>
 
         <RadioButton
             android:id="@+id/income"
@@ -42,6 +43,7 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:text="Введите сумму"
         app:layout_constraintStart_toStartOf="parent"

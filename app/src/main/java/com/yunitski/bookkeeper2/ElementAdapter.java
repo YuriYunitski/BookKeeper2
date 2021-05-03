@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -39,15 +40,7 @@ public class ElementAdapter extends RecyclerView.Adapter<ElementAdapter.ViewHold
         holder.valueView.setText(element.getValue());
         holder.totalValueView.setText(element.getTotalValue());
         holder.dateView.setText(element.getDate());
-//        if (MainActivity.outcome){
-//            holder.valueView.setTextColor(Color.parseColor("#EB4C42"));
-//            holder.totalValueView.setTextColor(Color.parseColor("#EB4C42"));
-//            holder.dateView.setTextColor(Color.parseColor("#EB4C42"));
-//        } else {
-//            holder.valueView.setTextColor(Color.parseColor("#50C878"));
-//            holder.totalValueView.setTextColor(Color.parseColor("#50C878"));
-//            holder.dateView.setTextColor(Color.parseColor("#50C878"));
-//        }
+        holder.imageView.setImageResource(element.getOperation());
     }
 
     @Override
@@ -72,11 +65,13 @@ public class ElementAdapter extends RecyclerView.Adapter<ElementAdapter.ViewHold
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         final TextView valueView, totalValueView, dateView;
+        final ImageView imageView;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             valueView = itemView.findViewById(R.id.tv_value);
             totalValueView = itemView.findViewById(R.id.tv_total_value);
             dateView = itemView.findViewById(R.id.tv_date);
+            imageView = itemView.findViewById(R.id.imageView);
         }
     }
 }

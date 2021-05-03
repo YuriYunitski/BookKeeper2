@@ -4,11 +4,21 @@ public class Element {
     String value;
     String totalValue;
     String date;
+    int operation;
 
-    public Element(String value, String totalValue, String date) {
+    public Element(String value, String totalValue, String date, int operation) {
         this.value = value;
         this.totalValue = totalValue;
         this.date = date;
+        this.operation = operation;
+    }
+
+    public int getOperation() {
+        return operation;
+    }
+
+    public void setOperation(int operation) {
+        this.operation = operation;
     }
 
     public String getValue() {

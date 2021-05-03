@@ -15,5 +15,7 @@ public class InputData {
         public static final String TOTAL_VALUE = "total_value";
 
         public static final String VALUE = "value";
+
+        public static final String OPERATION = "operation";
     }
 }

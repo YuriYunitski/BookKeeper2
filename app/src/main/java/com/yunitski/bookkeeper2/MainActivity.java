@@ -1,5 +1,6 @@
 package com.yunitski.bookkeeper2;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -12,8 +13,13 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -32,20 +38,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     ArrayList<Element> elements;
     FloatingActionButton fab;
     String mValue;
-    String mDate;
-    String mTotalValue;
     static boolean outcome, income;
-    String inputValue;
     EditText inpValueET;
     RadioButton radioButtonOut, radioButtonIn;
     RadioGroup radioGroup;
-    TextView balance, tvValue, tvTotalValue, tvDate;
+    TextView balance;
     DBHelper dbHelper;
-    ConstraintLayout constraintLayout;
     ElementAdapter adapter;
     RecyclerView recyclerView;
-    ArrayAdapter arrayAdapter;
     SharedPreferences sharedPreferences;
+    int res;
+    SQLiteDatabase database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,12 +56,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         fab = findViewById(R.id.floatingActionButton);
         fab.setOnClickListener(this);
-
+        outcome = true;
+        income = false;
         recyclerView = findViewById(R.id.recycler_list);
         balance = findViewById(R.id.balance);
         dbHelper = new DBHelper(this);
         loadBalance();
         updateUI();
+        registerForContextMenu(recyclerView);
+        registerForContextMenu(balance);
     }
 
     @Override
@@ -77,6 +83,45 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onDestroy() {
         super.onDestroy();
         saveBalance();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        menu.add(0, 0, 0, "Очистить историю");
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        this.deleteDatabase(InputData.DB_NAME);
+        loadBalance();
+        updateUI();
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        switch (v.getId()){
+            case R.id.balance:
+                MenuInflater inflater = getMenuInflater();
+                inflater.inflate(R.menu.balance_context_menu, menu);
+                break;
+        }
+
+    }
+
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        switch (item.getItemId()){
+            case R.id.balance_delete:
+                balance.setText("" + 0);
+                saveBalance();
+                updateUI();
+                break;
+        }
+        return super.onContextItemSelected(item);
     }
 
     @Override
@@ -99,15 +144,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                switch (checkedId){
-                    case R.id.income:
-                        income = true;
-                        outcome = false;
-                        break;
-                    case R.id.outcome:
-                        income = false;
-                        outcome = true;
-                        break;
+                if (checkedId == R.id.income) {
+                    income = true;
+                    outcome = false;
+                } else if (checkedId == R.id.outcome) {
+                    income = false;
+                    outcome = true;
                 }
             }
 
@@ -117,42 +159,43 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onClick(DialogInterface dialog, int which) {
                 mValue = "Баланс: " + inpValueET.getText().toString();
                 if (income){
-                    int i = Integer.parseInt(inpValueET.getText().toString());
-                    int bal = Integer.parseInt(balance.getText().toString());
-                    int k = bal + i;
-                    balance.setText("" + k);
-//                    elements.add(new Element(""+inpValueET.getText().toString(), ""+balance.getText().toString(), "" + dateC()));
-//                    sharedPreferences = getPreferences(MODE_PRIVATE);
-//                    SharedPreferences.Editor editor = sharedPreferences.edit();
-//                    editor.putString("b", balance.getText().toString());
-//                    editor.apply();
-                    ContentValues cv = new ContentValues();
-                    SQLiteDatabase db = dbHelper.getWritableDatabase();
-                    cv.put(InputData.TaskEntry.VALUE, i);
-                    cv.put(InputData.TaskEntry.TOTAL_VALUE, bal);
-                    cv.put(InputData.TaskEntry.DATE, dateC());
-                    db.insert(InputData.TaskEntry.TABLE, null, cv);
-                    db.close();
-                    saveBalance();
-                    updateUI();
+                    if (!inpValueET.getText().toString().isEmpty()) {
+                        res = R.drawable.ic_baseline_arrow_drop_up_24;
+                        int i = Integer.parseInt(inpValueET.getText().toString());
+                        int bal = Integer.parseInt(balance.getText().toString());
+                        int k = bal + i;
+                        balance.setText("" + k);
+                        ContentValues cv = new ContentValues();
+                        SQLiteDatabase db = dbHelper.getWritableDatabase();
+                        cv.put(InputData.TaskEntry.VALUE, i);
+                        cv.put(InputData.TaskEntry.TOTAL_VALUE, bal);
+                        cv.put(InputData.TaskEntry.DATE, dateC());
+                        cv.put(InputData.TaskEntry.OPERATION, res);
+                        db.insert(InputData.TaskEntry.TABLE, null, cv);
+                        db.close();
+                        saveBalance();
+                        updateUI();
+                    }
+                } else if(outcome){
+                    if (!inpValueET.getText().toString().isEmpty()) {
+                        res = R.drawable.ic_baseline_arrow_drop_down_24;
+                        int i = Integer.parseInt(inpValueET.getText().toString());
+                        int bal = Integer.parseInt(balance.getText().toString());
+                        int k = bal - i;
+                        balance.setText("" + k);
+                        ContentValues cv = new ContentValues();
+                        SQLiteDatabase db = dbHelper.getWritableDatabase();
+                        cv.put(InputData.TaskEntry.VALUE, i);
+                        cv.put(InputData.TaskEntry.TOTAL_VALUE, bal);
+                        cv.put(InputData.TaskEntry.DATE, dateC());
+                        cv.put(InputData.TaskEntry.OPERATION, res);
+                        db.insert(InputData.TaskEntry.TABLE, null, cv);
+                        db.close();
+                        saveBalance();
+                        updateUI();
+                    }
                 } else {
-                    int i = Integer.parseInt(inpValueET.getText().toString());
-                    int bal = Integer.parseInt(balance.getText().toString());
-                    int k = bal - i;
-                    balance.setText("" + k);
-//                    sharedPreferences = getPreferences(MODE_PRIVATE);
-//                    SharedPreferences.Editor editor = sharedPreferences.edit();
-//                    editor.putString("b", balance.getText().toString());
-//                    editor.apply();
-                    ContentValues cv = new ContentValues();
-                    SQLiteDatabase db = dbHelper.getWritableDatabase();
-                    cv.put(InputData.TaskEntry.VALUE, i);
-                    cv.put(InputData.TaskEntry.TOTAL_VALUE, bal);
-                    cv.put(InputData.TaskEntry.DATE, dateC());
-                    db.insert(InputData.TaskEntry.TABLE, null, cv);
-                    db.close();
-                    saveBalance();
-                    updateUI();
+                    Toast.makeText(getApplicationContext(), "no operation selected", Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -177,12 +220,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void updateUI(){
         elements = new ArrayList<Element>();
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        Cursor cursor = db.query(InputData.TaskEntry.TABLE, new String[]{InputData.TaskEntry._ID, InputData.TaskEntry.VALUE, InputData.TaskEntry.TOTAL_VALUE, InputData.TaskEntry.DATE}, null, null, null, null, null);
+        Cursor cursor = db.query(InputData.TaskEntry.TABLE, new String[]{InputData.TaskEntry._ID, InputData.TaskEntry.VALUE, InputData.TaskEntry.TOTAL_VALUE, InputData.TaskEntry.DATE, InputData.TaskEntry.OPERATION}, null, null, null, null, null);
         while (cursor.moveToNext()) {
             int idx = cursor.getColumnIndex(InputData.TaskEntry.DATE);
             int idx1 = cursor.getColumnIndex(InputData.TaskEntry.TOTAL_VALUE);
             int idx2 = cursor.getColumnIndex(InputData.TaskEntry.VALUE);
-            elements.add(0, new Element("" + cursor.getString(idx2), "" + cursor.getString(idx1),  "" + cursor.getString(idx)));
+            int idx3 = cursor.getColumnIndex(InputData.TaskEntry.OPERATION);
+            elements.add(0, new Element("" + cursor.getString(idx2), "" + cursor.getString(idx1),  "" + cursor.getString(idx), cursor.getInt(idx3)));
         }
         if (adapter == null) {
             adapter = new ElementAdapter(getLayoutInflater(), elements);
