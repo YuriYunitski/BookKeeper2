@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/item"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/_5sdp"
+    android:background="@drawable/rounded"
+    android:paddingStart="@dimen/_25sdp"
+    android:paddingEnd="@dimen/_25sdp"
+    android:paddingBottom="@dimen/_7sdp">
+
+
+    <TextView
+        android:id="@+id/tv_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_total_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_value" />
+
+    <TextView
+        android:id="@+id/tv_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_total_value" />
+
+    <View
+        android:id="@+id/divider5"
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="5dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintBottom_toTopOf="@+id/tv_total_value"
+        app:layout_constraintEnd_toEndOf="@+id/tv_value"
+        app:layout_constraintStart_toStartOf="@+id/tv_value"
+        app:layout_constraintTop_toBottomOf="@+id/tv_value" />
+
+    <View
+        android:id="@+id/divider6"
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="1dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintBottom_toTopOf="@+id/tv_date"
+        app:layout_constraintEnd_toEndOf="@+id/tv_total_value"
+        app:layout_constraintStart_toStartOf="@+id/tv_total_value"
+        app:layout_constraintTop_toBottomOf="@+id/tv_total_value" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Сумма"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_value"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tv_value" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="1dp"
+        android:text="Баланс"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_total_value"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tv_total_value" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="3dp"
+        android:text="Дата"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_date"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tv_date" />
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="3dp"
+        android:text="₽"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_value"
+        app:layout_constraintStart_toEndOf="@+id/tv_value"
+        app:layout_constraintTop_toTopOf="@+id/tv_value" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="3dp"
+        android:text="₽"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_total_value"
+        app:layout_constraintStart_toEndOf="@+id/tv_total_value"
+        app:layout_constraintTop_toTopOf="@+id/tv_total_value" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
