@@ -1,9 +1,13 @@
 package com.yunitski.bookkeeper2;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.ContentValues;
@@ -28,12 +32,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {
 
     ArrayList<Element> elements;
     FloatingActionButton fab;
@@ -49,11 +55,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     SharedPreferences sharedPreferences;
     int res;
     SQLiteDatabase database;
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.main_content);
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setBackgroundColor(Color.parseColor("#D5D5D5"));
+        setTitle("События");
+        getSupportActionBar().setDisplayShowTitleEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
         fab = findViewById(R.id.floatingActionButton);
         fab.setOnClickListener(this);
         outcome = true;
@@ -249,5 +268,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         sharedPreferences = getPreferences(MODE_PRIVATE);
         String bb =sharedPreferences.getString("b", "0");
         balance.setText(bb);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.IdItem1){
+            Toast.makeText(getApplicationContext(), "item1", Toast.LENGTH_SHORT).show();
+        } else if (id == R.id.IdItem2){
+            Toast.makeText(getApplicationContext(), "item2", Toast.LENGTH_SHORT).show();
+        } else if (id == R.id.IdItem3){
+            Toast.makeText(getApplicationContext(), "item3", Toast.LENGTH_SHORT).show();
+        }
+        DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
+        drawerLayout.closeDrawer(GravityCompat.START);
+        return true;
     }
 }
