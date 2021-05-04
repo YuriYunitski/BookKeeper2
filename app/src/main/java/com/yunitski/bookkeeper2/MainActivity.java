@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.ContentValues;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -274,9 +275,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.IdItem1){
-            Toast.makeText(getApplicationContext(), "item1", Toast.LENGTH_SHORT).show();
+            finish();
+            startActivity(new Intent(this, MainActivity.class));
+
         } else if (id == R.id.IdItem2){
-            Toast.makeText(getApplicationContext(), "item2", Toast.LENGTH_SHORT).show();
+            finish();
+            startActivity(new Intent(this, Exchange.class));
         } else if (id == R.id.IdItem3){
             Toast.makeText(getApplicationContext(), "item3", Toast.LENGTH_SHORT).show();
         }

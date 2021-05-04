@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="out">
+        <item>Продукты</item>
+        <item>Медицина</item>
+        <item>ЖКХ</item>
+        <item>Одежда</item>
+        <item>Техника</item>
+        <item>Связь</item>
+    </string-array>
+
+    <string-array name="in">
+        <item>Зарплата</item>
+        <item>Подарок</item>
+    </string-array>
+</resources>
